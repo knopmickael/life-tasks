@@ -1,8 +1,10 @@
 export type Kind = 'column' | 'category' | 'item';
-export interface TaskNode { id: string; type: Kind; title: string; parentId: string | null; archived: boolean }
+export const COLUMN_ICON_IDS = ['grid', 'house', 'book', 'briefcase', 'code', 'heart', 'wallet', 'cart', 'plane', 'dumbbell', 'music', 'star'] as const;
+export type ColumnIcon = typeof COLUMN_ICON_IDS[number];
+export interface TaskNode { id: string; type: Kind; title: string; parentId: string | null; archived: boolean; icon?: ColumnIcon }
 export interface Board { version: 1; nodes: TaskNode[] }
 export interface TreeNode extends TaskNode { children: TreeNode[]; context: boolean }
-export type Action = { type: 'add'; node: TaskNode } | { type: 'edit'; id: string; title: string } | { type: 'delete'; id: string } | { type: 'archive'; id: string; archived: boolean } | { type: 'move'; id: string; parentId: string; beforeId?: string };
+export type Action = { type: 'add'; node: TaskNode } | { type: 'edit'; id: string; title: string; icon?: ColumnIcon } | { type: 'delete'; id: string } | { type: 'archive'; id: string; archived: boolean } | { type: 'move'; id: string; parentId: string; beforeId?: string };
 export function importText(text: string, columnId: string): TaskNode[] {
   const nodes: TaskNode[] = [];
   const stack: { indent: number; node: TaskNode }[] = [];
@@ -27,6 +29,7 @@ export function validateBoard(value: unknown): asserts value is Board {
   const ids = new Map<string, TaskNode>();
   for (const n of nodes) {
     if (!n || typeof n.id !== 'string' || !n.id || ids.has(n.id) || !['column', 'category', 'item'].includes(n.type) || typeof n.title !== 'string' || !n.title.trim() || typeof n.archived !== 'boolean' || (n.parentId !== null && typeof n.parentId !== 'string')) throw new Error('Dados de item inválidos.');
+    if (n.icon !== undefined && (n.type !== 'column' || !COLUMN_ICON_IDS.includes(n.icon))) throw new Error('Ícone de coluna inválido.');
     ids.set(n.id, n);
   }
   for (const n of nodes) {
@@ -54,7 +57,10 @@ export function changeBoard(board: Board, action: Action): Board {
       previous = descendants.size;
       for (const n of nodes) if (n.parentId && descendants.has(n.parentId)) descendants.add(n.id);
     }
-    if (action.type === 'edit') node.title = action.title.trim();
+    if (action.type === 'edit') {
+      node.title = action.title.trim();
+      if (action.icon !== undefined) node.icon = action.icon;
+    }
     if (action.type === 'delete') nodes = nodes.filter(n => !descendants.has(n.id));
     if (action.type === 'archive') {
       for (const n of nodes) if (descendants.has(n.id)) n.archived = action.archived;

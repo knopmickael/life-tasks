@@ -1,9 +1,24 @@
 import { useEffect, useRef, useState, type DragEvent, type FormEvent, type ReactNode } from 'react';
-import { Archive, ArrowDownUp, ArrowLeft, ArrowUp, BookOpen, BriefcaseBusiness, Check, ChevronDown, ChevronRight, Download, FolderPlus, GripVertical, House, ListPlus, Moon, Pencil, Plus, Search, Sun, Trash2, Upload, X } from 'lucide-react';
-import { changeBoard, validateBoard, visibleTree, type Action, type Board, type Kind, type TaskNode, type TreeNode } from './model';
+import { Archive, ArrowDownUp, ArrowUp, BookOpen, BriefcaseBusiness, Check, ChevronDown, ChevronRight, Code, Download, Dumbbell, FolderPlus, GripVertical, Heart, House, LayoutGrid, ListPlus, Moon, Music, Pencil, Plane, Plus, Search, ShoppingCart, Star, Sun, Trash2, Upload, Wallet, X } from 'lucide-react';
+import { COLUMN_ICON_IDS, changeBoard, validateBoard, visibleTree, type Action, type Board, type ColumnIcon, type Kind, type TaskNode, type TreeNode } from './model';
 import { loadBoard, saveBoard, storageLabel } from './storage';
 
-type Editor = { mode: 'add' | 'edit' | 'move' | 'delete'; type: Kind; id?: string; parentId: string | null; title: string };
+const columnIcons = {
+  grid: { label: 'Geral', Icon: LayoutGrid }, house: { label: 'Casa', Icon: House },
+  book: { label: 'Estudos', Icon: BookOpen }, briefcase: { label: 'Trabalho', Icon: BriefcaseBusiness },
+  code: { label: 'Tecnologia', Icon: Code }, heart: { label: 'Saúde', Icon: Heart },
+  wallet: { label: 'Finanças', Icon: Wallet }, cart: { label: 'Compras', Icon: ShoppingCart },
+  plane: { label: 'Viagens', Icon: Plane }, dumbbell: { label: 'Exercícios', Icon: Dumbbell },
+  music: { label: 'Música', Icon: Music }, star: { label: 'Projetos', Icon: Star },
+};
+function columnIcon(node: TaskNode): ColumnIcon {
+  if (node.icon) return node.icon;
+  if (node.id === 'home') return 'house';
+  if (node.id === 'study') return 'book';
+  if (node.id === 'work') return 'briefcase';
+  return 'grid';
+}
+type Editor = { mode: 'add' | 'edit' | 'move' | 'delete'; type: Kind; id?: string; parentId: string | null; title: string; icon?: ColumnIcon };
 function IconButton({ label, children, onClick, className = '' }: { label: string; children: ReactNode; onClick: () => void; className?: string }) {
   return <button type="button" className={`icon-button ${className}`} aria-label={label} title={label} onClick={onClick}>{children}</button>;
 }
@@ -74,7 +89,7 @@ export default function App() {
     setEditor({ mode: 'add', type, parentId, title: '' });
   }
   function edit(node: TaskNode, mode: Editor['mode']) {
-    setEditor({ mode, type: node.type, id: node.id, parentId: node.parentId, title: node.title });
+    setEditor({ mode, type: node.type, id: node.id, parentId: node.parentId, title: node.title, icon: node.type === 'column' ? columnIcon(node) : undefined });
   }
   function toggle(id: string) {
     setCollapsed(previous => { const next = new Set(previous); if (next.has(id)) next.delete(id); else next.add(id); return next; });
@@ -84,11 +99,12 @@ export default function App() {
     const data = new FormData(event.currentTarget);
     const title = String(data.get('title') ?? editor.title);
     const parentId = String(data.get('parentId') ?? editor.parentId ?? '') || null;
+    const appearance = editor.type === 'column' ? { icon: String(data.get('icon') ?? 'grid') as ColumnIcon } : {};
     let action: Action;
     if (editor.mode === 'delete') action = { type: 'delete', id: editor.id! };
     else if (editor.mode === 'move') action = { type: 'move', id: editor.id!, parentId: parentId! };
-    else if (editor.mode === 'edit') action = { type: 'edit', id: editor.id!, title };
-    else action = { type: 'add', node: { id: crypto.randomUUID(), type: editor.type, title, parentId, archived: false } };
+    else if (editor.mode === 'edit') action = { type: 'edit', id: editor.id!, title, ...appearance };
+    else action = { type: 'add', node: { id: crypto.randomUUID(), type: editor.type, title, parentId, archived: false, ...appearance } };
     if (await act(action)) {
       if (action.type === 'add') {
         const ancestorIds: string[] = []; let ancestor = latest.current?.nodes.find(n => n.id === action.node.parentId);
@@ -191,12 +207,10 @@ export default function App() {
         const tree = filterTree(visibleTree(board!, column.id, archived), query.trim().toLocaleLowerCase('pt-BR'));
         const fullTree = visibleTree(board!, column.id, archived);
         const countItems = (nodes: TreeNode[]): number => nodes.reduce((sum, n) => sum + (n.type === 'item' && !n.context ? 1 : 0) + countItems(n.children), 0);
-        const Icon = [House, BookOpen, BriefcaseBusiness][index % 3];
+        const Icon = columnIcons[columnIcon(column)].Icon;
         return <section key={column.id} className={`column tone-${index % 4} ${archived ? 'archive-mode' : ''}`} aria-label={`Coluna ${column.title}`} onDragOver={event => event.preventDefault()} onDrop={event => drop(event, column, true)}>
-          <header className="column-header"><div className="column-name"><span className="column-icon"><Icon size={18}/></span><h2>{column.title}</h2><span className="column-count">{countItems(fullTree)}</span></div><div className="column-controls"><IconButton label={`Adicionar item em ${column.title}`} onClick={() => add('item', column.id)}><Plus size={19}/></IconButton><IconButton label={`Editar coluna ${column.title}`} onClick={() => edit(column, 'edit')}><Pencil size={13}/></IconButton><IconButton label={`Remover coluna ${column.title}`} onClick={() => edit(column, 'delete')} className="danger-hover"><Trash2 size={13}/></IconButton></div></header>
-          <div className="column-subheader"><span>{archived ? 'Itens concluídos' : 'Uma coisa de cada vez'}</span><button className={`archive-toggle ${archived ? 'selected' : ''}`} aria-pressed={archived} onClick={() => setArchives(a => ({ ...a, [column.id]: !archived }))}>{archived ? <ArrowLeft size={13}/> : <Archive size={13}/>} {archived ? 'Voltar aos ativos' : 'Arquivados'}</button></div>
+          <header className="column-header"><div className="column-name"><span className="column-icon"><Icon size={18}/></span><h2>{column.title}</h2><span className="column-count">{countItems(fullTree)}</span></div><div className="column-controls"><IconButton label={`Adicionar item em ${column.title}`} onClick={() => add('item', column.id)}><Plus size={19}/></IconButton><IconButton label={`Editar coluna ${column.title}`} onClick={() => edit(column, 'edit')}><Pencil size={13}/></IconButton><button type="button" className={`icon-button archive-toggle ${archived ? 'selected' : ''}`} aria-label={`${archived ? 'Voltar aos ativos de' : 'Mostrar arquivados de'} ${column.title}`} title={archived ? 'Voltar aos ativos' : 'Mostrar arquivados'} aria-pressed={archived} onClick={() => setArchives(a => ({ ...a, [column.id]: !archived }))}><Archive size={13}/></button><IconButton label={`Remover coluna ${column.title}`} onClick={() => edit(column, 'delete')} className="danger-hover"><Trash2 size={13}/></IconButton></div></header>
           <div className="column-content">{tree.map(node => renderNode(node))}{!tree.length && <div className="empty-state">{archived ? <Archive size={28}/> : <ListPlus size={28}/>}<strong>{query ? 'Nenhum resultado' : archived ? 'Nenhum item arquivado' : 'Tudo começa com um item'}</strong><p>{query ? 'Experimente buscar por outro termo.' : archived ? 'Os itens concluídos aparecem aqui.' : 'Use o + para adicionar sua primeira tarefa.'}</p></div>}</div>
-          <button className="add-bottom" onClick={() => add('item', column.id)}><Plus size={15}/> Adicionar item</button>
         </section>;
       })}
       {board && !columns.length && <button className="new-column-empty" onClick={() => add('column', null)}><Plus size={24}/> Criar meu primeiro assunto</button>}
@@ -207,6 +221,10 @@ export default function App() {
       {editor && <form onSubmit={submit} key={`${editor.mode}-${editor.id}-${editor.parentId}`}><div className="dialog-header"><span className="dialog-icon">{editor.mode === 'delete' ? <Trash2 size={20}/> : <Pencil size={20}/>}</span><IconButton label="Fechar" onClick={() => setEditor(null)}><X size={20}/></IconButton></div><h2 id="editor-heading">{editorHeading}</h2>
         {editor.mode === 'delete' ? <p className="delete-description">Remover “{editor.title}” e todos os seus itens e subtarefas? Esta ação não pode ser desfeita.</p> : <>
           {editor.mode !== 'move' && <label className="field">{editor.type === 'item' ? 'Texto do item' : 'Nome'}<textarea name="title" aria-label={editor.type === 'item' ? 'Texto do item' : 'Nome'} required autoFocus defaultValue={editor.title} rows={editor.type === 'item' ? 3 : 2} placeholder={editor.type === 'item' ? 'O que você precisa fazer?' : 'Dê um nome…'}/></label>}
+          {editor.type === 'column' && editor.mode !== 'move' && <fieldset className="icon-picker"><legend>Ícone da coluna</legend><div className="icon-options">{COLUMN_ICON_IDS.map(id => {
+            const { label, Icon } = columnIcons[id];
+            return <label className="icon-option" key={id} title={label}><input type="radio" name="icon" value={id} defaultChecked={id === (editor.icon ?? 'grid')} /><Icon size={20}/><span>{label}</span></label>;
+          })}</div></fieldset>}
           {editor.type !== 'column' && (editor.mode === 'move' || (editor.mode === 'add' && editor.type === 'category')) && <label className="field">{editor.type === 'category' ? 'Coluna' : 'Destino'}<select name="parentId" defaultValue={editor.parentId ?? ''} required>{eligible.map(n => <option key={n.id} value={n.id}>{path(n)}</option>)}</select></label>}
           {editor.mode === 'add' && editor.type === 'item' && <p className="field-hint">Será adicionado no topo de {board?.nodes.find(n => n.id === editor.parentId)?.title}. Texto puro, do seu jeito.</p>}
           {editor.mode === 'move' && <p className="field-hint">O item será movido para o topo do destino, junto com todos os filhos. Para reordenar, use o puxador ou o botão abaixo.</p>}

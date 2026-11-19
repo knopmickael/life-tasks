@@ -18,6 +18,21 @@ const fixture = (): Board => ({ version: 1, nodes: [
   { id: 'p', type: 'item', title: 'Motor', parentId: 'cat', archived: false },
   { id: 'c', type: 'item', title: 'Óleo', parentId: 'p', archived: false },
 ] });
+test('column icon changes survive title edits and backup round trips', () => {
+  const original = fixture();
+  const selected = changeBoard(original, { type: 'edit', id: 'a', title: 'Saúde', icon: 'heart' });
+  const renamed = changeBoard(selected, { type: 'edit', id: 'a', title: 'Bem-estar' });
+  const restored: unknown = JSON.parse(JSON.stringify(renamed));
+  validateBoard(restored);
+  assert.equal(restored.nodes.find(n => n.id === 'a')!.icon, 'heart');
+  assert.equal(original.nodes[0].title, 'Casa');
+  assert.equal(original.nodes[0].icon, undefined);
+});
+test('legacy boards remain valid but invalid or non-column icons are rejected', () => {
+  assert.doesNotThrow(() => validateBoard(fixture()));
+  assert.throws(() => validateBoard({ version: 1, nodes: [{ ...fixture().nodes[0], icon: 'unknown' }] }));
+  assert.throws(() => validateBoard({ version: 1, nodes: fixture().nodes.map(n => n.id === 'cat' ? { ...n, icon: 'heart' } : n) }));
+});
 test('archiving a subtree hides active items and retains archived hierarchy', () => {
   const board = changeBoard(fixture(), { type: 'archive', id: 'p', archived: true });
   assert.equal(visibleTree(board, 'a', false)[0].children.length, 0);
