@@ -1,0 +1,53 @@
+Lavanderia
+    [x] Arrumar
+    [] Comprar máquina nova (aguardar INSS)
+
+Carro
+    [] Motor (Guilherme)
+        - Arrumar óleo vazando
+        - Trocar coxim raquete
+        - Validar barulho da correia
+
+    [] Rodas (Bruno)
+        - Arrumar amassado roda carona
+        - Colocar pneus novos
+        - Geometria e balanceamento
+        - Colocar calota nova
+
+    [] Elétrica (Farias)
+        - Tranca da porta dessincronizada novamente
+
+    [] Retrovisor direito arranhado
+        - Limpar com removedor de transmissão de tinta
+
+    [] Combinar insufilme Beto
+        - Coprar Lara e Livia lebranca
+        - Coprar coca 2L
+
+    [] Farol traseiro quebrado
+    [] Orçar amassados e arranhões
+
+    [x] Arrumar elétrica (Farias)
+        - Freio acendendo farol baixo
+        - Pedal do acelerador morrendo quando liga os faróis
+        - Na primeira girada de chave ele não liga
+        - Porta do carona não tranca/destranca na chave
+        - Porta do carona só abre por fora
+    [x] Comprar chave nova
+    [x] Comprar tapetinho
+    [x] Pagar multa
+
+Quarto
+    [] Fire stick + régua
+
+Eleições multas
+    [x] 1º turno Mickael
+    [x] 1º turno Júlia
+    [x] 2º turno Mickael
+
+Escritório
+    [x] Teclado novo
+
+Jardel
+    [] Negociar aluguel por fora
+    [x] Goteiras

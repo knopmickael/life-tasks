@@ -1,0 +1,53 @@
+VAGAS
+    - Verificar whatsapp
+    - Verificar e-mails
+
+MPRS 
+    - Trocar a senha SSO
+    - Aurora-service
+        - Ler conteúdo da Issue
+    - Curso de capacitação em Promotorias
+    - Analisar apresentação Maquelin
+    - Usuario-service  
+        - Still have tasks masked as undone
+
+SIDE
+    - Criar integração local para criar publicações no X
+
+    - Arrumar manual-input-dealing do LINKEDIN-POST-PUBLISHER
+    
+    - Rave Trail - checkout pagamento GERAR plano
+    - Entender novas skills Opencode
+    - Continuar desenvolvimento Brecho Curadoria
+    - Revisar plano GitHub contribuitor AGENT
+    - Entender releases GitHub repo Rave Trail
+    - Rave Trail - multiplayer IMPLEMENTAR plano
+    - Criar Operadora Celular App Web UI Local
+        - Operadora READ
+        - Plano atual READ
+        - Créditos restantes READ
+        - SMS recebidos READ/DELETE
+    - Validar visibilidade do repo Rave Trail após integrações com Checkout
+    - Testar carga nas aplicações em prod
+    - Criar aplicação distribuída na AWS (EKS, SQS, Observabilidade)
+    - Criar red team pessoal constante
+    - Entender GA4 Rave Trail
+    - Entender SEO Rave Trail
+    - Pensar em ADS pros projetos
+    - Adicionar speech-to-text no Opencode
+
+NETWORK
+    - Experimentar agent do Rafa
+    - Marcar call com Wagner sobre o setup de IA dele
+    - Validar modelos do Emerson sem guardrails enviados por ele
+
+YOUTUBE
+    - Continuar Redes
+    - Introdução à programação com JS
+        - Módulos (import/export)
+        - Tratamento de erros (try/catch)
+        - Promises
+        - Async/Await
+        - Recursão
+        - Classes/OOP
+        - Set e Map

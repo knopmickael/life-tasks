@@ -1,0 +1,446 @@
+PROCESSADOR / COMPUTAÇÃO
+    CPU
+    IO
+    Thread
+    Process
+    Context Switch
+    Syscall
+    Interrupt
+    Event Loop
+    Async / Sync
+    Paralelismo
+    Concorrência
+    Cache CPU
+    SIMD
+    NUMA
+
+MEMÓRIA
+    Stack / Heap
+    Virtual Memory
+    Paging
+    Memory Mapping
+    Garbage Collection
+    Memory Leak
+    Cache
+    Localidade de memória
+    Shared Memory
+    Memory Ordering
+    Lock / Mutex
+    Semaphore
+    Atomic / CAS
+
+SISTEMA OPERACIONAL
+    Kernel
+    User Space / Kernel Space
+    Processos
+    Threads
+    Scheduling
+    File Descriptors
+    Signals
+    IPC
+    Pipes
+    Sockets
+    Filesystem
+    Permissions
+    Namespaces
+    cgroups
+
+DISCO / STORAGE
+    HDD / SSD / NVMe
+    IOPS
+    Throughput
+    Latência
+    Filesystem
+    Buffer / Cache
+    RAID
+    Replicação
+    Journaling
+    WAL
+    Object Storage
+    Block Storage
+    Distributed Storage
+
+REDES
+    OSI / TCP-IP
+    Ethernet
+    ARP
+    IPv4
+    IPv6
+    Subnetting / CIDR
+    Routing
+    NAT
+    Firewall
+    DNS
+    DHCP
+    ICMP
+    TCP
+    UDP
+    TLS
+    HTTP/1.1
+    HTTP/2
+    HTTP/3
+    QUIC
+    WebSocket
+    SSE
+    MQTT
+    gRPC / RPC
+    Proxies
+    Load Balancer
+    Reverse Proxy
+    VPN
+    Docker Networking
+    VLAN
+    Overlay Network
+    Service Discovery
+
+DOCKER / CONTAINERS
+    Container
+    Image
+    Registry
+    Layer
+    Dockerfile
+    Volumes
+    Bind Mount
+    Bridge Network
+    Host Network
+    Overlay Network
+    Network Namespace
+    cgroups
+    Docker Compose
+    Healthcheck
+    Resource Limits
+    Container Security
+    Container Orchestration
+    Kubernetes
+
+KUBERNETES
+    Pod
+    Deployment
+    ReplicaSet
+    Service
+    Ingress
+    ConfigMap
+    Secret
+    Namespace
+    Resource Requests / Limits
+    Liveness / Readiness
+    HPA
+    StatefulSet
+    Job / CronJob
+    Persistent Volume
+    Service Discovery
+    Scheduling
+    Rolling Update
+
+BANCO DE DADOS
+    Relacional
+    SQL
+    Índices
+    B-Tree
+    Hash Index
+    Query Planner
+    Transactions
+    ACID
+    Isolation Levels
+    Locks
+    Deadlocks
+    MVCC
+    Connection Pool
+    Replication
+    Master / Replica
+    Sharding
+    Partitioning
+    Read / Write Split
+    Failover
+    Distributed Transactions
+    CAP
+    Consistency Models
+    NoSQL
+    Redis
+    Document DB
+    Time Series DB
+
+MENSAGERIA / DISTRIBUÍDOS
+    Queue
+    Pub/Sub
+    Broker
+    Producer / Consumer
+    Consumer Group
+    Offset
+    Acknowledgement
+    Retry
+    Dead Letter Queue
+    Backpressure
+    Ordering
+    Idempotência
+    At-least-once
+    At-most-once
+    Exactly-once
+    Kafka
+    RabbitMQ
+    SQS
+    Event Bus
+
+SYSTEM DESIGN
+    Stateless / Stateful
+    Horizontal Scaling
+    Vertical Scaling
+    Load Balancing
+    Caching
+    CDN
+    Rate Limiting
+    Circuit Breaker
+    Bulkhead
+    Timeout
+    Retry
+    Backpressure
+    Idempotência
+    Distributed Lock
+    Leader Election
+    Service Discovery
+    Event-Driven Architecture
+    Microservices
+    Monolith
+    Modular Monolith
+    Distributed Systems
+
+PADRÕES ARQUITETURAIS
+    Layered Architecture
+    Clean Architecture
+    Hexagonal Architecture
+    DDD
+    Bounded Context
+    Aggregate
+    Repository
+    CQRS
+    Event Sourcing
+    Saga
+    Outbox Pattern
+    Transactional Inbox
+    Strangler Pattern
+    API Gateway
+    Backend for Frontend
+
+CONSISTÊNCIA / EVENTOS
+    Event
+    Domain Event
+    Eventual Consistency
+    Strong Consistency
+    Event Ordering
+    Event Replay
+    Event Sourcing
+    CQRS
+    Saga
+    Outbox
+    CDC
+    Distributed Transaction
+
+OBSERVABILIDADE
+    Logs
+    Metrics
+    Traces
+    Telemetria
+    OpenTelemetry
+    Correlation ID
+    Distributed Tracing
+    Health Checks
+    SLI
+    SLO
+    SLA
+    Error Budget
+    Alerting
+    Profiling
+    APM
+    RED
+    USE
+
+JAVA / JVM
+    JVM
+    JDK / JRE
+    Bytecode
+    ClassLoader
+    JIT
+    Garbage Collector
+    Heap
+    Stack
+    Thread
+    Virtual Thread
+    Thread Pool
+    Executor
+    CompletableFuture
+    Synchronization
+    Locks
+    Java Memory Model
+    Spring
+    Spring Boot
+    Spring Security
+    Spring Data
+    Spring Cloud
+
+DESIGN PATTERNS
+    GOF
+    Factory
+    Abstract Factory
+    Builder
+    Adapter
+    Decorator
+    Facade
+    Strategy
+    Observer
+    Command
+    State
+    Template Method
+    Proxy
+    Dependency Injection
+
+SEGURANÇA
+    Authentication
+    Authorization
+    OAuth2
+    OpenID Connect
+    JWT
+    TLS
+    mTLS
+    CORS
+    CSRF
+    XSS
+    SQL Injection
+    Secrets Management
+    RBAC
+    IAM
+    Zero Trust
+    OWASP
+    Supply Chain Security
+
+CLOUD / AWS
+    EC2
+    VPC
+    Subnet
+    Route Table
+    Security Group
+    IAM
+    S3
+    RDS
+    ElastiCache
+    SQS
+    SNS
+    EventBridge
+    Lambda
+    ECS
+    EKS
+    CloudWatch
+    ALB
+    Auto Scaling
+    CloudFront
+    Route 53
+    Terraform
+    IaC
+
+CI/CD / DEVOPS
+    Git
+    GitHub Actions
+    Build
+    Artifact
+    Registry
+    CI
+    CD
+    Blue/Green
+    Canary
+    Rolling Deployment
+    Infrastructure as Code
+    Terraform
+    Secrets
+    Supply Chain
+    SBOM
+    SAST
+    DAST
+    Container Scanning
+
+TESTES
+    Unit
+    Integration
+    Contract Testing
+    E2E
+    Testcontainers
+    Mocking
+    Property-Based Testing
+    Load Testing
+    Stress Testing
+    k6
+    Chaos Engineering
+
+PERFORMANCE
+    Latency
+    Throughput
+    IOPS
+    CPU Bound
+    IO Bound
+    p50 / p95 / p99
+    Profiling
+    Benchmark
+    Load Testing
+    Stress Testing
+    Bottleneck Analysis
+    Capacity Planning
+    Little's Law
+
+FRONTEND / WEB
+    Browser Runtime
+    DOM
+    Event Loop
+    Rendering
+    HTTP Cache
+    Cookies
+    Session
+    Web Storage
+    CORS
+    WebSocket
+    SSE
+    SSR
+    CSR
+    Hydration
+    CDN
+    Core Web Vitals
+
+AI
+    LLM
+    Transformer
+    Embeddings
+    Vector Database
+    RAG
+    Chunking
+    Retrieval
+    Reranking
+    Tool Calling
+    Function Calling
+    Agents
+    MCP
+    Prompt Engineering
+    Structured Output
+    Fine-tuning
+    LoRA
+    Quantization
+    Inference
+    Context Window
+    Tokenização
+    Evaluation
+    Guardrails
+    AI Observability
+    Model Serving
+    Local Inference
+    Ollama
+
+ENGENHARIA DE SOFTWARE
+    SOLID
+    Clean Code
+    Coupling
+    Cohesion
+    Dependency Injection
+    Refactoring
+    Technical Debt
+    API Design
+    Versioning
+    Backward Compatibility
+    Semantic Versioning
+    Documentation
+    Code Review
