@@ -142,7 +142,7 @@ export default function App() {
       {!folded && <div className={category ? 'category-items' : 'children'}>
         {node.children.map(child => renderNode(child, depth + 1))}
         {category && !node.children.length && <button className="empty-category" onClick={() => add('item', node.id)}><Plus size={13} /> Adicionar primeiro item</button>}
-        {dragId && dragId !== node.id && <div className="drop-inside" onDragOver={event => event.preventDefault()} onDrop={event => drop(event, node, true)}>Soltar {category ? 'nesta categoria' : 'como subtarefa'}</div>}
+        {dragId && dragId !== node.id && board?.nodes.find(n => n.id === dragId)?.type === 'item' && <div className="drop-inside" onDragOver={event => event.preventDefault()} onDrop={event => drop(event, node, true)}>Soltar {category ? 'nesta categoria' : 'como subtarefa'}</div>}
       </div>}
     </div>;
   }
