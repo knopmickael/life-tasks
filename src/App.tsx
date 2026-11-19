@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type DragEvent, type FormEvent, type ReactNode } from 'react';
-import { Archive, ArrowDownUp, ArrowLeft, ArrowUp, BookOpen, BriefcaseBusiness, Check, ChevronDown, ChevronRight, CircleCheck, Download, FolderPlus, GripVertical, House, LayoutGrid, ListPlus, Pencil, Plus, Search, Trash2, Upload, X } from 'lucide-react';
+import { Archive, ArrowDownUp, ArrowLeft, ArrowUp, BookOpen, BriefcaseBusiness, Check, ChevronDown, ChevronRight, Download, FolderPlus, GripVertical, House, ListPlus, Moon, Pencil, Plus, Search, Sun, Trash2, Upload, X } from 'lucide-react';
 import { changeBoard, validateBoard, visibleTree, type Action, type Board, type Kind, type TaskNode, type TreeNode } from './model';
 import { loadBoard, saveBoard, storageLabel } from './storage';
 
@@ -16,6 +16,10 @@ function filterTree(nodes: TreeNode[], query: string): TreeNode[] {
   });
 }
 export default function App() {
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    try { return localStorage.getItem('life-tasks:theme:v1') === 'dark' ? 'dark' : 'light'; }
+    catch { return 'light'; }
+  });
   const [board, setBoard] = useState<Board | null>(null);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
@@ -39,6 +43,10 @@ export default function App() {
     catch (e) { if (sequence === loadSequence.current) setError((e as Error).message); }
   }
   useEffect(() => { void load(); return () => { loadSequence.current++; }; }, []);
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    try { localStorage.setItem('life-tasks:theme:v1', theme); } catch { /* Theme still works when storage is unavailable. */ }
+  }, [theme]);
   useEffect(() => {
     if (editor) {
       returnFocus.current = document.activeElement as HTMLElement;
@@ -121,8 +129,6 @@ export default function App() {
     if (upload.current) upload.current.value = '';
   }
   const columns = board?.nodes.filter(n => n.type === 'column') ?? [];
-  const active = board?.nodes.filter(n => n.type === 'item' && !n.archived).length ?? 0;
-  const archivedCount = board?.nodes.filter(n => n.type === 'item' && n.archived).length ?? 0;
   function renderNode(node: TreeNode, depth = 0): ReactNode {
     const category = node.type === 'category';
     const folded = collapsed.has(node.id) && !query;
@@ -161,9 +167,22 @@ export default function App() {
     return names.join(' / ');
   }
   return <div className="app-shell">
-    <header className="app-header"><a className="brand" href="./"><span className="brand-mark"><Check size={22} strokeWidth={3} /></span>life<span className="brand-light">tasks</span></a><span className="header-divider"/><span className="workspace-name">Meu espaço pessoal</span><div className="header-actions"><button className="button secondary" onClick={() => add('category', columns[0]?.id ?? null)} disabled={!columns.length}><FolderPlus size={16} /> Nova categoria</button><button className="button primary" onClick={() => add('column', null)}><Plus size={17} /> Nova coluna</button></div></header>
-    <main><section className="intro"><div><div className="intro-label"><LayoutGrid size={15}/> Seu quadro, do seu jeito</div><h1>Um espaço para cada assunto<span>.</span></h1><p>Organize o que precisa fazer. Abra espaço para o que importa.</p></div><div className="summary"><span><strong>{active}</strong> em aberto</span><span className="summary-divider"/><span><CircleCheck size={16}/><strong>{archivedCount}</strong> arquivados</span></div></section>
-    <section className="toolbar" aria-label="Ferramentas do quadro"><div className="board-label"><LayoutGrid size={17}/><h2>Meu quadro</h2><span className="pill">{columns.length} assuntos</span></div><div className="board-tools"><label className="search"><Search size={16}/><input aria-label="Buscar itens" placeholder="Buscar no quadro…" value={query} onChange={e => setQuery(e.target.value)} />{query && <IconButton label="Limpar busca" onClick={() => setQuery('')}><X size={14}/></IconButton>}</label><IconButton label="Exportar backup" onClick={download}><Download size={17}/></IconButton><IconButton label="Importar backup (substitui o quadro)" onClick={() => upload.current?.click()}><Upload size={17}/></IconButton><input hidden ref={upload} type="file" accept="application/json,.json" onChange={e => { void importFile(e.target.files?.[0]); }}/></div></section>
+    <header className="app-header">
+      <a className="brand" href="./"><span className="brand-mark"><Check size={22} strokeWidth={3} /></span>life<span className="brand-light">tasks</span></a>
+      <span className="save-status" role="status" aria-live="polite"><span className={`status-dot ${error ? 'has-error' : ''}`}/>{saving ? 'Salvando…' : error ? 'Alteração não salva' : `${storageLabel} · salvo`}</span>
+      <div className="header-actions">
+        <label className="search"><Search size={16}/><input aria-label="Buscar itens" placeholder="Buscar no quadro…" value={query} onChange={e => setQuery(e.target.value)} />{query && <IconButton label="Limpar busca" onClick={() => setQuery('')}><X size={14}/></IconButton>}</label>
+        <div className="header-tools">
+          <IconButton label="Exportar backup" onClick={download}><Download size={17}/></IconButton>
+          <IconButton label="Importar backup (substitui o quadro)" onClick={() => upload.current?.click()}><Upload size={17}/></IconButton>
+          <IconButton label={theme === 'light' ? 'Ativar tema escuro' : 'Ativar tema claro'} onClick={() => setTheme(previous => previous === 'light' ? 'dark' : 'light')}>{theme === 'light' ? <Moon size={18}/> : <Sun size={18}/>}</IconButton>
+        </div>
+        <input hidden ref={upload} type="file" accept="application/json,.json" onChange={e => { void importFile(e.target.files?.[0]); }}/>
+        <button className="button secondary" onClick={() => add('category', columns[0]?.id ?? null)} disabled={!columns.length}><FolderPlus size={16} /> Nova categoria</button>
+        <button className="button primary" onClick={() => add('column', null)}><Plus size={17} /> Nova coluna</button>
+      </div>
+    </header>
+    <main>
     {error && <div role="alert" className="error-banner">{error}{!board && <button onClick={() => { void load(); }}>Tentar novamente</button>}<IconButton label="Fechar erro" onClick={() => setError('')}><X size={16}/></IconButton></div>}
     {!board && !error && <p className="loading" role="status">Preparando seu espaço…</p>}
     <div className="board" role="region" aria-label="Quadro de assuntos" aria-busy={saving}>
@@ -182,7 +201,6 @@ export default function App() {
       })}
       {board && !columns.length && <button className="new-column-empty" onClick={() => add('column', null)}><Plus size={24}/> Criar meu primeiro assunto</button>}
     </div>
-    <footer className="app-footer"><span><GripVertical size={14}/> Arraste pelo puxador para organizar. Categorias levam seus itens junto.</span><span role="status" aria-live="polite"><span className={`status-dot ${error ? 'has-error' : ''}`}/>{saving ? 'Salvando…' : error ? 'Alteração não salva' : `${storageLabel} · salvo`}</span></footer>
     <span className="sr-only" role="status" aria-live="polite">{notice}</span>
     </main>
     <dialog ref={dialog} onCancel={() => setEditor(null)} className="editor-dialog" aria-labelledby="editor-heading">
