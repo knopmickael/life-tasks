@@ -1,6 +1,6 @@
 import Fastify from 'fastify';
 import { DatabaseSync } from 'node:sqlite';
-import { validateBoard } from '../src/model.ts';
+import { COLUMN_ICON_IDS, validateBoard } from '../src/model.ts';
 export async function createApp(path: string) {
   const app = Fastify({ bodyLimit: 5 * 1024 * 1024 });
   const db = new DatabaseSync(path);
@@ -14,7 +14,7 @@ export async function createApp(path: string) {
     type: 'object', required: ['version', 'nodes'], additionalProperties: false,
     properties: { version: { const: 1 }, nodes: { type: 'array', maxItems: 20000, items: {
       type: 'object', required: ['id', 'type', 'title', 'parentId', 'archived'], additionalProperties: false,
-      properties: { id: { type: 'string', minLength: 1 }, type: { enum: ['column', 'category', 'item'] }, title: { type: 'string', minLength: 1 }, parentId: { type: ['string', 'null'] }, archived: { type: 'boolean' } },
+      properties: { id: { type: 'string', minLength: 1 }, type: { enum: ['column', 'category', 'item'] }, title: { type: 'string', minLength: 1 }, parentId: { type: ['string', 'null'] }, archived: { type: 'boolean' }, icon: { enum: COLUMN_ICON_IDS } },
     } } },
   } } }, async (request, reply) => {
     try { validateBoard(request.body); }

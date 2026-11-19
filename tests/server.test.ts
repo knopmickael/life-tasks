@@ -10,7 +10,7 @@ test('API persists plain strings and order in SQLite across server restarts', as
   let app = await createApp(join(dir, 'test.sqlite'));
   try {
     assert.equal((await app.inject('/api/board')).json(), null);
-    const board = { version: 1, nodes: [{ id: 'col', title: '<script>texto</script>', type: 'column', parentId: null, archived: false }] };
+    const board = { version: 1, nodes: [{ id: 'col', title: '<script>texto</script>', type: 'column', parentId: null, archived: false, icon: 'heart' }] };
     assert.equal((await app.inject({ method: 'PUT', url: '/api/board', payload: board })).statusCode, 200);
     await app.close(); app = await createApp(join(dir, 'test.sqlite'));
     assert.deepEqual((await app.inject('/api/board')).json(), board);
