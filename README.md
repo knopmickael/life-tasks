@@ -25,7 +25,7 @@ O build estático fica em `dist/`. O caminho base `/life-tasks/` já está confi
 ## Como usar
 
 - Colunas são assuntos: **Casa, Estudos e Trabalho** na primeira abertura.
-- Os TXT originais alimentam o quadro inicial: **34 categorias e 479 itens**, dos quais **15 arquivados**. Texto, acentos e hierarquia são preservados; marcadores de lista e conclusão são convertidos em estrutura.
+- O quadro inicial contém apenas as três colunas e a categoria de exemplo **Mercado**, em Casa. Não há tarefas nem itens arquivados predefinidos; cada usuário cria seu próprio conteúdo.
 - **+ na coluna** cria um item no topo, sem categoria; **+ na categoria** cria dentro dela; **+ no item** cria um filho. Filhos podem ter outros filhos.
 - **Nova categoria** no cabeçalho permite informar nome e coluna. Colunas, categorias e itens têm edição e remoção.
 - Marcar o quadradinho conclui e arquiva o item e todos os seus filhos. **Arquivados** alterna somente a coluna clicada. Restaurar um filho reativa seus pais, mantendo os demais filhos arquivados.
@@ -38,7 +38,9 @@ O build estático fica em `dist/`. O caminho base `/life-tasks/` já está confi
 
 ## Dados e backups
 
-O quadro é salvo automaticamente na chave **`life-tasks:board:v1`** do localStorage. Os TXT são importados **somente na primeira abertura**, quando a chave não existe. Um quadro vazio salvo não é repopulado. Atualizar o site ou alterar os TXT não sobrescreve seus dados.
+O quadro é salvo automaticamente na chave **`life-tasks:board:v2`** do localStorage. A estrutura inicial é criada somente quando essa chave não existe. Um quadro vazio salvo não é repopulado. Os TXT não são incluídos no site nem importados automaticamente.
+
+A antiga chave `life-tasks:board:v1`, usada pela versão com tarefas pessoais predefinidas, deixou de ser carregada. Na primeira abertura desta atualização, o usuário começa com a estrutura vazia descrita acima. As alterações feitas a partir daí são preservadas normalmente.
 
 Cada navegador/origem tem seu próprio quadro. Não há sincronização com o GitHub nem entre dispositivos. Limpar os dados do navegador remove suas alterações locais.
 
@@ -78,7 +80,7 @@ Os testes cobrem importação, hierarquia de arquivamento e restauração, movim
 ## Estrutura
 
 - `src/model.ts`: modelo hierárquico, operações e validação.
-- `src/seed.ts`: importação inicial dos três TXT.
+- `src/seed.ts`: estrutura inicial vazia com três colunas e a categoria Mercado.
 - `src/persistence.ts`: armazenamento local versionado e tratamento de falhas.
 - `src/storage.ts`: conexão entre interface e persistência.
 - `src/App.tsx` / `src/styles.css`: quadro, diálogos, busca e arrastar e soltar.

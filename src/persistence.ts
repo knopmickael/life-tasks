@@ -1,5 +1,5 @@
 import { validateBoard, type Board } from './model';
-export const STORAGE_KEY = 'life-tasks:board:v1';
+export const STORAGE_KEY = 'life-tasks:board:v2';
 export class LocalBoardStore {
   constructor(private storage: Pick<Storage, 'getItem' | 'setItem'>, private seed: () => Board) {}
   load(): Board {
