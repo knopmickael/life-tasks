@@ -50,7 +50,7 @@ Use **Exportar backup** para baixar um JSON com todo o quadro. **Importar backup
 
 | Branch | Persistência | Execução |
 | --- | --- | --- |
-| `main` | localStorage | Site estático / GitHub Pages |
+| `localStorage` | localStorage | Site estático / GitHub Pages |
 | `sqlite` | SQLite + API Fastify | Node.js; `npm run dev` ou `npm run build && npm start` |
 
 Para usar o backend:
@@ -65,7 +65,7 @@ Consulte o README dessa branch para detalhes da API e do arquivo SQLite.
 
 ## GitHub Pages
 
-O workflow `.github/workflows/pages.yml` testa, compila e publica a cada push na `main`. Em **Settings → Pages → Source**, use **GitHub Actions**. A publicação gera o site em https://knopmickael.github.io/life-tasks/.
+O workflow `.github/workflows/pages.yml` testa, compila e publica a cada push na `localStorage`, a branch padrão do repositório. Em **Settings → Pages → Source**, use **GitHub Actions**. O ambiente `github-pages` deve permitir deploys da branch `localStorage`. A publicação gera o site em https://knopmickael.github.io/life-tasks/.
 
 ## Verificar
 

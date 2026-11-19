@@ -1,7 +1,7 @@
 name: Deploy Life Tasks to Pages
 on:
   push:
-    branches: [main]
+    branches: [localStorage]
   workflow_dispatch:
 permissions:
   contents: read
